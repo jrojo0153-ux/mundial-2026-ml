@@ -3,53 +3,48 @@ import joblib
 import requests
 from datetime import datetime
 
-# Cargar modelo y codificador
-modelo = joblib.load('models/modelo_mundial.pkl')
-le = joblib.load('models/codificador_equipos.pkl')
+# Cargar Modelo V2 y Diccionario de Rankings
+modelo = joblib.load('models/modelo_mundial_v2.pkl')
+ranking_dict = joblib.load('models/ranking_dict.pkl')
 
-def predecir_resultado(local, visitante):
-    try:
-        # Si el equipo no existe en el codificador, lo manejamos
-        if local not in le.classes_ or visitante not in le.classes_:
-            return "Duelo Nuevo", "50%"
-        
-        id_l = le.transform([local])[0]
-        id_v = le.transform([visitante])[0]
-        
-        prob = modelo.predict_proba([[id_l, id_v]])[0]
-        
-        # Lógica de decisión
-        if prob[0] > prob[2] and prob[0] > prob[1]:
-            return f"Gana {local}", f"{prob[0]*100:.1f}%"
-        elif prob[2] > prob[0] and prob[2] > prob[1]:
-            return f"Gana {visitante}", f"{prob[2]*100:.1f}%"
-        else:
-            return "Empate", f"{prob[1]*100:.1f}%"
-    except:
-        return "Análisis pendiente", "N/A"
+def get_rank(pais):
+    return ranking_dict.get(pais, 100)
 
-# Obtener partidos de ESPN
-url = "https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard"
-data = requests.get(url).json()
-
-partidos_lista = []
-for evento in data.get('events', []):
-    comp = evento['competitions'][0]
-    loc = comp['competitors'][0]['team']['displayName']
-    vis = comp['competitors'][1]['team']['displayName']
+def predecir_v2(local, visitante):
+    r_l = get_rank(local)
+    r_v = get_rank(visitante)
+    diff = r_l - r_v
     
-    pred, conf = predecir_resultado(loc, vis)
+    # La IA ahora analiza la diferencia de nivel
+    prob = modelo.predict_proba([[r_l, r_v, diff]])[0]
     
-    partidos_lista.append({
-        'Partido': f"{loc} vs {vis}",
-        'Predicción': pred,
-        'Confianza': conf
-    })
+    opciones = [f"Gana {local}", "Empate", f"Gana {visitante}"]
+    idx = prob.argmax()
+    
+    return opciones[idx], f"{prob[idx]*100:.1f}%"
 
-# Crear README
+# Obtener partidos de hoy de ESPN
+try:
+    url = "https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard"
+    data = requests.get(url).json()
+    
+    partidos_lista = []
+    for evento in data.get('events', []):
+        comp = evento['competitions'][0]
+        loc = comp['competitors'][0]['team']['displayName']
+        vis = comp['competitors'][1]['team']['displayName']
+        
+        pred, conf = predecir_v2(loc, vis)
+        partidos_lista.append({'Partido': f"{loc} vs {vis}", 'Predicción': pred, 'Confianza': conf})
+
+    df = pd.DataFrame(partidos_lista)
+    tabla = df.to_markdown(index=False) if not df.empty else "No hay partidos hoy."
+except:
+    tabla = "Error al obtener partidos o no hay juegos hoy."
+
+# Escribir README
 fecha = datetime.now().strftime("%Y-%m-%d")
-df = pd.DataFrame(partidos_lista)
-tabla = df.to_markdown(index=False) if not df.empty else "No hay partidos para hoy."
-
 with open("README.md", "w") as f:
-    f.write(f"# 🏆 Predicciones Mundial 2026\n\n### 📅 Hoy: {fecha}\n\n{tabla}\n\n---\n_Actualizado automáticamente_")
+    f.write(f"# 🏆 IA Mundial 2026 (V2 - High Accuracy)\n\n")
+    f.write(f"### 📅 Predicciones para hoy: {fecha}\n\n{tabla}\n\n")
+    f.write("---\n_IA mejorada con Ranking FIFA y Random Forest_")
