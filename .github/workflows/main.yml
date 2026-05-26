@@ -1,14 +1,14 @@
-name: Auto_Actualizar_Datos
+name: Prediccion_Diaria_Mundial
 on:
   schedule:
-    - cron: '0 0 * * 0' # Se ejecuta cada domingo a las 12 AM
-  workflow_dispatch: # Botón para ejecutarlo cuando quieras
+    - cron: '0 8 * * *' # Se ejecuta todos los días a las 8:00 AM UTC
+  workflow_dispatch: # Botón para ejecutar manual
 
 jobs:
-  actualizar:
+  predict:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout repo
         uses: actions/checkout@v3
 
       - name: Configurar Python
@@ -17,37 +17,15 @@ jobs:
           python-version: '3.9'
 
       - name: Instalar dependencias
-        run: pip install pandas requests
+        run: pip install pandas scikit-learn joblib requests tabulate
 
-      - name: Ejecutar Script de ESPN
-        run: |
-          python - <<EOF
-          import requests
-          import pandas as pd
-          import os
+      - name: Ejecutar Predicciones
+        run: python predict_daily.py
 
-          # Extraer datos actuales de ESPN
-          url = "https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard"
-          data = requests.get(url).json()
-          
-          partidos = []
-          for evento in data.get('events', []):
-              comp = evento['competitions'][0]
-              partidos.append({
-                  'local': comp['competitors'][0]['team']['displayName'],
-                  'visitante': comp['competitors'][1]['team']['displayName'],
-                  'fecha': evento['date']
-              })
-          
-          df = pd.DataFrame(partidos)
-          os.makedirs('data', exist_ok=True)
-          df.to_csv('data/proximos_partidos.csv', index=False)
-          EOF
-
-      - name: Subir cambios
+      - name: Guardar cambios en README
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add data/proximos_partidos.csv
-          git commit -m "Actualización automática de partidos" || exit 0
+          git add README.md
+          git commit -m "Actualización diaria de predicciones" || exit 0
           git push
