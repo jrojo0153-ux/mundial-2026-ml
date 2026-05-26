@@ -1,11 +1,11 @@
-# 🏆 Predicciones Mundial 2026
+# 🏆 IA Mundial 2026 (V2 - High Accuracy)
 
-### 📅 Hoy: 2026-05-26
+### 📅 Predicciones para hoy: 2026-05-26
 
-| Partido                | Predicción   | Confianza   |
-|:-----------------------|:-------------|:------------|
-| Mexico vs South Africa | Gana Mexico  | 48.0%       |
-| South Korea vs Czechia | Gana Czechia | 91.0%       |
+| Partido                | Predicción        | Confianza   |
+|:-----------------------|:------------------|:------------|
+| Mexico vs South Africa | Gana South Africa | 34.2%       |
+| South Korea vs Czechia | Gana Czechia      | 43.4%       |
 
 ---
-_Actualizado automáticamente_
+_IA mejorada con Ranking FIFA y Random Forest_
