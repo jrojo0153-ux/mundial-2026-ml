@@ -2,10 +2,14 @@
 
 ### 📅 Predicciones para hoy: 2026-05-27
 
-| Partido                | Predicción        | Confianza   |
-|:-----------------------|:------------------|:------------|
-| Mexico vs South Africa | Gana South Africa | 34.2%       |
-| South Korea vs Czechia | Gana Czechia      | 43.4%       |
+<div align="center">
+
+| 🏳️ Partido | ⚽ Predicción | 📊 Confianza |
+|:---|:---|:---|
+| 🇲🇽 Mexico vs 🇿🇦 South Africa | Gana South Africa | **34.2%** |
+| 🇰🇷 South Korea vs 🇨🇿 Czechia | Gana Czechia | **43.4%** |
+
+</div>
 
 ---
 _IA mejorada con Ranking FIFA y Random Forest_
