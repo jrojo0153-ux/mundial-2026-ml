@@ -1,13 +1,13 @@
 # 🏆 IA Mundial 2026 (V2 - High Accuracy)
 
-### 📅 Predicciones para hoy: 2026-06-18
+### 📅 Predicciones para hoy: 2026-06-19
 
-| Partido                           | Predicción              | Confianza   |
-|:----------------------------------|:------------------------|:------------|
-| Czechia vs South Africa           | Gana South Africa       | 43.4%       |
-| Switzerland vs Bosnia-Herzegovina | Gana Bosnia-Herzegovina | 43.4%       |
-| Canada vs Qatar                   | Gana Qatar              | 43.4%       |
-| Mexico vs South Korea             | Gana South Korea        | 34.2%       |
+| Partido                    | Predicción     | Confianza   |
+|:---------------------------|:---------------|:------------|
+| United States vs Australia | Gana Australia | 43.4%       |
+| Scotland vs Morocco        | Gana Morocco   | 43.4%       |
+| Brazil vs Haiti            | Gana Brazil    | 60.5%       |
+| Türkiye vs Paraguay        | Gana Paraguay  | 43.4%       |
 
 ---
 _IA mejorada con Ranking FIFA y Random Forest_
