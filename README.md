@@ -1,6 +1,6 @@
 # 🏆 IA Mundial 2026 (V2 - High Accuracy)
 
-### 📅 Predicciones para hoy: 2026-11-16
+### 📅 Predicciones para hoy: 2026-11-17
 
 | Partido            | Predicción     | Confianza   |
 |:-------------------|:---------------|:------------|
